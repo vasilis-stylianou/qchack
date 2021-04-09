@@ -1,0 +1,2 @@
+# qchack
+Quantum Coalition Hackathon
