@@ -1,2 +1,1 @@
-# qchack
-Quantum Coalition Hackathon
+# <Team Name>
