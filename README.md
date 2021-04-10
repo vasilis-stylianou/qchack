@@ -1,4 +1,4 @@
-# <Team Name>
+# Team Name
 
 Directions:
 
@@ -14,6 +14,6 @@ Directions:
     - type "test" and save
     - add: ```$ git add <file_path>``` (you can also run ```$ git status``` to find the path)
     - commit: ```$ git commit -m "<your_message>"```
-    - push: ```$ git push --set-upstream origin <your_name>```
+    - push: ```$ git push --set-upstream origin <your_name>```<br>
     Note: from now on you can simply use ```$ git push```
  
