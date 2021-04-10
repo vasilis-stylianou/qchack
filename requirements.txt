@@ -101,12 +101,6 @@ python-constraint==1.4.0
 python-dateutil==2.8.1
 pytz==2021.1
 pyzmq==22.0.3
-qiskit==0.24.0
-qiskit-aer==0.7.6
-qiskit-aqua==0.8.2
-qiskit-ibmq-provider==0.12.1
-qiskit-ignis==0.5.2
-qiskit-terra==0.16.4
 Quandl==3.6.1
 qutip==4.5.3
 requests==2.25.1
