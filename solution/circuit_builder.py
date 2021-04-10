@@ -12,6 +12,10 @@ def factorized_gate_list_to_qcircuit(
     :return:
     """
 
+    def convert_gatelist_to_cirq_ops(gatelist):
+        # Implement once we know the exact input.
+        return gatelist
+
     def convert_to_compatible_gates(operations, device):
         """
         Checks if operations are not compatible and converts
