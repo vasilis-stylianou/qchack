@@ -8,7 +8,7 @@ Directions:
     - create a virtual environment and call it ```.env```: you can use [conda](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#activating-an-environment) or [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) 
     - acivate your venv
     - install packages from ```requirements.txt``` 
-3. Create a new git branch: ```$ git checkout -b <your_name>$
+3. Create a new git branch: ```$ git checkout -b <your_name>```
 4. Set an upstream: 
     - open ```./members/<your_name>/README.md```
     - type "test" and save
