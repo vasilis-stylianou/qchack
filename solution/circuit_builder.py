@@ -56,7 +56,7 @@ def factorized_gate_list_to_qcircuit(
     sycamore_gates = cirq.google.gate_sets.SYC_GATESET
 
     # Create a circuit on the device
-    circuit = cirq.Circuit(device=device)
+    circuit = cirq.Circuit()#device=device)
 
     # Convert list of gates to cirq operations
     ops = convert_gatelist_to_cirq_ops(factorized_gate_list, target_qubits)
@@ -74,6 +74,7 @@ def factorized_gate_list_to_qcircuit(
     return circuit
 
 
-factorized_gate_list = [[cirq.CZ,[0,1]], [cirq.CZ, [2,0]], [cirq.H, [3]]]
+factorized_gate_list = [[cirq.CZ,[0,1]], [cirq.CZ, [2,0]],
+                        [cirq.CZ, [3,1]], [cirq.CZ, [2,3]], [cirq.H, [3]]]
 target_qubits = [cirq.GridQubit(4,i) for i in range(1,9)]
 factorized_gate_list_to_qcircuit(factorized_gate_list, target_qubits)
