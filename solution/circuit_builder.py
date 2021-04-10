@@ -3,6 +3,7 @@ import cirq
 def factorized_gate_list_to_qcircuit(
         factorized_gate_list,
         # Of the form [[gate_2q, [qx, qy]], [gate_1q, [qx]], ... ]
+        target_qubits,
         device = cirq.google.Sycamore,
 ):
     """
@@ -12,9 +13,20 @@ def factorized_gate_list_to_qcircuit(
     :return:
     """
 
-    def convert_gatelist_to_cirq_ops(gatelist):
+    def convert_gatelist_to_cirq_ops(gatelist, target_qubits):
         # Implement once we know the exact input.
-        return gatelist
+        ops = []
+        for gate, bits in gatelist:
+            if len(bits) == 1:
+                q1 = target_qubits[bits[0]]
+                ops.append(gate(q1))
+            elif len(bits) == 2:
+                q1, q2 = target_qubits[bits[0]], target_qubits[bits[1]]
+                ops.append(gate(q1, q2))
+            else:
+                NotImplementedError("Gates larger than 2 qbits are not implemented.")
+
+        return ops
 
     def convert_to_compatible_gates(operations, device):
         """
@@ -47,8 +59,7 @@ def factorized_gate_list_to_qcircuit(
     circuit = cirq.Circuit(device=device)
 
     # Convert list of gates to cirq operations
-    # From list to cirq.CNOT.on(cirq.NamedQubit("a"), cirq.NamedQubit("b")))
-    ops = convert_gatelist_to_cirq_ops(factorized_gate_list)
+    ops = convert_gatelist_to_cirq_ops(factorized_gate_list, target_qubits)
 
     # Convert incompatible gates to compatible
     ops_comp = convert_to_compatible_gates(ops, device)
@@ -62,3 +73,7 @@ def factorized_gate_list_to_qcircuit(
     print(circuit)
     return circuit
 
+
+factorized_gate_list = [[cirq.CZ,[0,1]], [cirq.CZ, [2,0]], [cirq.H, [3]]]
+target_qubits = [cirq.GridQubit(4,i) for i in range(1,9)]
+factorized_gate_list_to_qcircuit(factorized_gate_list, target_qubits)
