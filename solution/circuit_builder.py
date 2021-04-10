@@ -11,7 +11,8 @@ def convert_gatelist_to_cirq_ops(gatelist, target_qubits):
             q1, q2 = target_qubits[bits[0]], target_qubits[bits[1]]
 
             # Check if SWAP is necessary
-            if q1 is not neighbour to q2:# Check if q1 and q2 are neighbours
+            # Check if q1 and q2 are neighbours
+            if not q1.is_adjacent(q2):
                 swap_operations, new_q2 = get_swap_qbits_list(q1, q2)
                 ops.append(swap_operations)
                 ops.append(gate(q1, new_q2))
@@ -54,6 +55,7 @@ def get_swap_qbits_list(q1:cirq.GridQubit, q2:cirq.GridQubit):
 
 def get_short_path(coord1, coord2):
     """
+    coords q1 = [5,0],    q2 = [5,4]
     Calculates the shortest path within a device structure.
     Returns an array with the series of swaps required.
     :param coord1:
@@ -77,6 +79,7 @@ def convert_to_compatible_gates(operations, device):
 
     for i, op in enumerate(operations):
         # Check if X is supported.
+        sycamore_gates = cirq.google.gate_sets.SYC_GATESET
         if not sycamore_gates.is_supported_operation(op):
             """Convert a gate to xmon gates."""
 
@@ -99,9 +102,6 @@ def factorized_gate_list_to_qcircuit(
     :param device:
     :return:
     """
-
-    # GENERAL PARAMS
-    sycamore_gates = cirq.google.gate_sets.SYC_GATESET
 
     # Create a circuit on the device
     circuit = cirq.Circuit()#device=device)
