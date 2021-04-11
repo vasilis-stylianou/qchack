@@ -26,7 +26,8 @@ def convert_gatelist_to_cirq_ops(operation_list):
             else:
                 ops.append(gate(q1, q2))
         else:
-            NotImplementedError("Gates larger than 2 qbits are not implemented.")
+            # 3 qbit gate (no time to implement)
+            ops.append(op)
 
     return ops
 
@@ -139,11 +140,15 @@ def convert_to_compatible_gates(operations, device):
 
 
 def convert_ops_to_sycamore(
-        operation_list, device = cirq.google.Sycamore, create_circuit=False,
+        operation_list, account_for_geometry,
+        device = cirq.google.Sycamore, create_circuit=False,
 ):
 
-    # Convert operation to gates to cirq operations
-    ops_converted = convert_gatelist_to_cirq_ops(operation_list)
+    if account_for_geometry:
+        # Convert operation to gates to cirq operations
+        ops_converted = convert_gatelist_to_cirq_ops(operation_list, account_for_geometry)
+    else:
+        ops_converted = operation_list
 
     # Convert incompatible gates to compatible
     ops_comp = convert_to_compatible_gates(ops_converted, device)
@@ -158,3 +163,99 @@ def convert_ops_to_sycamore(
         print(circuit)
 
     return ops_comp
+
+
+
+
+
+
+
+operation_list = [cirq.PhasedXPowGate(phase_exponent=0.5678998743900456, exponent=0.5863459345743176).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=0.3549946157441739).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5154334589432878, exponent=0.5228733015013345).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.06774925307475355).on(cirq.GridQubit(4, 1)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5987667922766213, exponent=0.4136540654256824).on(cirq.GridQubit(4, 1)),
+ (cirq.Z**-0.9255092746611595).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-1.333333333333333).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=0.44650378384076217, exponent=0.8817921214052824).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=-0.7656774060816165, exponent=0.6628666504604785).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.6277589946716742, exponent=0.5659160932099687).on(cirq.GridQubit(4, 1)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.28890767199499257, exponent=0.4340839067900317).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.22592784059288928).on(cirq.GridQubit(4, 1)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.4691261557936808, exponent=0.7728525693920243).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=-0.8150261316932077, exponent=0.11820787859471782).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-0.7384700844660306).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-0.7034535141382525).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=0.5678998743900456, exponent=0.5863459345743176).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.3549946157441739).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 3), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5154334589432878, exponent=0.5228733015013345).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.06774925307475355).on(cirq.GridQubit(4, 3)),
+ cirq.google.SYC(cirq.GridQubit(4, 3), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5987667922766213, exponent=0.4136540654256824).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.9255092746611595).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-1.333333333333333).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.44650378384076217, exponent=0.8817921214052824).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=-0.7656774060816165, exponent=0.6628666504604785).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.6277589946716742, exponent=0.5659160932099687).on(cirq.GridQubit(4, 1)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.28890767199499257, exponent=0.4340839067900317).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.22592784059288928).on(cirq.GridQubit(4, 1)),
+ cirq.google.SYC(cirq.GridQubit(4, 1), cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.4691261557936808, exponent=0.7728525693920243).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=-0.8150261316932077, exponent=0.11820787859471782).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-0.7384700844660306).on(cirq.GridQubit(4, 2)),
+ (cirq.Z**-0.7034535141382525).on(cirq.GridQubit(4, 1)),
+ cirq.PhasedXPowGate(phase_exponent=0.44650378384076217, exponent=0.8817921214052824).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.7656774060816165, exponent=0.6628666504604785).on(cirq.GridQubit(4, 3)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.6277589946716742, exponent=0.5659160932099687).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.28890767199499257, exponent=0.4340839067900317).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.22592784059288928).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.4691261557936808, exponent=0.7728525693920243).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.8150261316932077, exponent=0.11820787859471782).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.7384700844660306).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.7034535141382525).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.5678998743900456, exponent=0.5863459345743176).on(cirq.GridQubit(4, 4)),
+ cirq.PhasedXPowGate(phase_exponent=0.3549946157441739).on(cirq.GridQubit(4, 3)),
+ cirq.google.SYC(cirq.GridQubit(4, 4), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5154334589432878, exponent=0.5228733015013345).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.06774925307475355).on(cirq.GridQubit(4, 4)),
+ cirq.google.SYC(cirq.GridQubit(4, 4), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5987667922766213, exponent=0.4136540654256824).on(cirq.GridQubit(4, 4)),
+ (cirq.Z**-0.9255092746611595).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-1.333333333333333).on(cirq.GridQubit(4, 4)),
+ cirq.PhasedXPowGate(phase_exponent=0.44650378384076217, exponent=0.8817921214052824).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.7656774060816165, exponent=0.6628666504604785).on(cirq.GridQubit(4, 3)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.6277589946716742, exponent=0.5659160932099687).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.28890767199499257, exponent=0.4340839067900317).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.22592784059288928).on(cirq.GridQubit(4, 2)),
+ cirq.google.SYC(cirq.GridQubit(4, 2), cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=-0.4691261557936808, exponent=0.7728525693920243).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=-0.8150261316932077, exponent=0.11820787859471782).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.7384700844660306).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.7034535141382525).on(cirq.GridQubit(4, 2)),
+ cirq.PhasedXPowGate(phase_exponent=0.5678998743900456, exponent=0.5863459345743176).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXPowGate(phase_exponent=0.3549946157441739).on(cirq.GridQubit(4, 4)),
+ cirq.google.SYC(cirq.GridQubit(4, 3), cirq.GridQubit(4, 4)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5154334589432878, exponent=0.5228733015013345).on(cirq.GridQubit(4, 4)),
+ cirq.PhasedXPowGate(phase_exponent=0.06774925307475355).on(cirq.GridQubit(4, 3)),
+ cirq.google.SYC(cirq.GridQubit(4, 3), cirq.GridQubit(4, 4)),
+ cirq.PhasedXPowGate(phase_exponent=-0.5987667922766213, exponent=0.4136540654256824).on(cirq.GridQubit(4, 3)),
+ (cirq.Z**-0.9255092746611595).on(cirq.GridQubit(4, 4)),
+ (cirq.Z**-1.333333333333333).on(cirq.GridQubit(4, 3)),
+ cirq.PhasedXZGate(axis_phase_exponent=-0.5, x_exponent=0.5, z_exponent=-1.0).on(cirq.GridQubit(4, 4))]
+
+ops, circuit = convert_ops_to_sycamore(operation_list=operation_list)
+print(ops)
+print(len(ops))

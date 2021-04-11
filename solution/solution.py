@@ -50,7 +50,11 @@ def matrix_to_sycamore_operations(
         ops_simple = breakdown_multiple_control_op_to_convertible_gate_op(op)
         ops_simple.extend()
 
-    # Step 5: Convert "convertible gates" to sycamore-specific gates
-    ops_syc = convert_ops_to_sycamore(ops_conv)
+
+    # Step 5 (without geometry constraint): Convert "convertible gates" to sycamore-specific gates
+    ops_syc = convert_ops_to_sycamore(ops_conv, account_for_geometry=False)
+
+    # Step 5 (with geometry constraint): Convert "convertible gates" to sycamore-specific gates
+    ops_syc = convert_ops_to_sycamore(ops_conv, account_for_geometry=True)
 
     return ops_syc, []
