@@ -3,20 +3,21 @@ import cirq
 def convert_gatelist_to_cirq_ops(gatelist, target_qubits):
     # Implement once we know the exact input.
     ops = []
-    for gate, bits in gatelist:
-        if len(bits) == 1:
-            q1 = target_qubits[bits[0]]
+    # Index is wrt the factorized matrix
+    for gate, indices in gatelist:
+        if len(indices) == 1:
+            q1 = target_qubits[indices[0]]
             ops.append(gate(q1))
-        elif len(bits) == 2:
-            q1, q2 = target_qubits[bits[0]], target_qubits[bits[1]]
+        elif len(indices) == 2:
+            q1, q2 = target_qubits[indices[0]], target_qubits[indices[1]]
 
             # Check if SWAP is necessary
             # Check if q1 and q2 are neighbours
             if not q1.is_adjacent(q2):
-                swap_operations, new_q2 = get_swap_qbits_list(q1, q2)
-                ops.append(swap_operations)
+                #swap_operations, new_q2 = get_swap_qbits_list(q1, q2)
+                #ops.append(swap_operations)
                 ops.append(gate(q1, new_q2))
-                ops.append(swap_operations[::-1])
+                #ops.append(swap_operations[::-1])
             else:
                 ops.append(gate(q1, q2))
         else:
@@ -119,10 +120,13 @@ def factorized_gate_list_to_qcircuit(
     circuit = cirq.google.optimized_for_sycamore(circuit)
 
     print(circuit)
-    return circuit
+    return ops
 
 
 factorized_gate_list = [[cirq.CZ,[0,1]], [cirq.CZ, [2,0]],
                         [cirq.CZ, [3,1]], [cirq.CZ, [2,3]], [cirq.H, [3]]]
+
 target_qubits = [cirq.GridQubit(4,i) for i in range(1,9)]
-factorized_gate_list_to_qcircuit(factorized_gate_list, target_qubits)
+ops = factorized_gate_list_to_qcircuit(factorized_gate_list, target_qubits)
+print(ops)
+len(ops)
