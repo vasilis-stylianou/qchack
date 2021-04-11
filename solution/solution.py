@@ -3,6 +3,7 @@ import numpy as np
 from typing import List, Tuple
 from matrices import two_level_decomp
 from gates import create_gates_from_gray
+from bridge import breakdown_multiple_control_op_to_convertible_gate_op
 
 # ###################################################################################################
 def matrix_to_sycamore_operations(
@@ -41,6 +42,12 @@ def matrix_to_sycamore_operations(
         
     # Step 3: Create cirq operations
     ops = [gate.build_op(target_qubits) for gate in all_gates]
-    
 
-    return ops, []
+    # Step 4: Convert multiple-control gates to convertable gates
+    ops_conv = []
+    for op in ops:
+        ops_simple = breakdown_multiple_control_op_to_convertible_gate_op(op)
+        ops_simple.extend()
+
+
+    return ops_conv, []
