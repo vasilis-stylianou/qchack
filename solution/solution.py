@@ -4,6 +4,7 @@ from typing import List, Tuple
 from matrices import two_level_decomp
 from gates import create_gates_from_gray
 from bridge import breakdown_multiple_control_op_to_convertible_gate_op
+from sycamore import convert_ops_to_sycamore
 
 # ###################################################################################################
 def matrix_to_sycamore_operations(
@@ -49,5 +50,7 @@ def matrix_to_sycamore_operations(
         ops_simple = breakdown_multiple_control_op_to_convertible_gate_op(op)
         ops_simple.extend()
 
+    # Step 5: Convert "convertible gates" to sycamore-specific gates
+    ops_syc = convert_ops_to_sycamore(ops_conv)
 
-    return ops_conv, []
+    return ops_syc, []
