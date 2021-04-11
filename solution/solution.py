@@ -1,9 +1,10 @@
-from typing import List, Tuple
-
-import numpy as np
 import cirq
+import numpy as np
+from typing import List, Tuple
+from .utils.matrices import two_level_decomp
+from .utils.gates import create_gates_from_gray
 
-
+# ###################################################################################################
 def matrix_to_sycamore_operations(
     target_qubits: List[cirq.GridQubit], matrix: np.ndarray
 ) -> Tuple[cirq.OP_TREE, List[cirq.GridQubit]]:
@@ -27,4 +28,19 @@ def matrix_to_sycamore_operations(
                 an empty list.
         .
     """
-    return NotImplemented, []
+
+    num_qubits = len(target_qubits)
+    
+    # Step 1: Decompose unitary to two-level matrices
+    matrices, indices_list = two_level_decomp(unitary)
+
+    # Step 2: Create Fully-controlled gates
+    all_gates = []
+    for matrix, indices in zip(matrices, indices_list):
+        all_gates += create_gates_from_gray(matrix, indices, num_qubits)
+        
+    # Step 3: Create cirq operations
+    ops = [gate.build_op(target_qubits) for gate in all_gates]
+    
+
+    return ops, []
