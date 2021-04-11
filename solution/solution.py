@@ -1,8 +1,8 @@
 import cirq
 import numpy as np
 from typing import List, Tuple
-from .utils.matrices import two_level_decomp
-from .utils.gates import create_gates_from_gray
+from matrices import two_level_decomp
+from gates import create_gates_from_gray
 
 # ###################################################################################################
 def matrix_to_sycamore_operations(
@@ -32,7 +32,7 @@ def matrix_to_sycamore_operations(
     num_qubits = len(target_qubits)
     
     # Step 1: Decompose unitary to two-level matrices
-    matrices, indices_list = two_level_decomp(unitary)
+    matrices, indices_list = two_level_decomp(matrix)
 
     # Step 2: Create Fully-controlled gates
     all_gates = []
