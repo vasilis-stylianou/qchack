@@ -3,7 +3,7 @@
 ## Members 
  Elliot Eklund<br/>
  Joanne Sheppard<br/>
- Vasilis _ <br/>
+ Vasilis Stylianou <br/>
  Jordi _ <br/>
  Josh Mckeown
 
