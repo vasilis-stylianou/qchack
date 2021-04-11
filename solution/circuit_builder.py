@@ -119,17 +119,18 @@ def convert_to_compatible_gates(operations, device):
     else:
         NotImplementedError("Code only compatible for Sycamore hardware.")
 
+    ops_compatible = []
     for i, op in enumerate(operations):
         # Check if X is supported.
         sycamore_gates = cirq.google.gate_sets.SYC_GATESET
         if not sycamore_gates.is_supported_operation(op):
-            """Convert a gate to xmon gates."""
-
+            """Convert a gate to sycamore gates."""
             # Do the conversion.
             op_conv = converter.convert(op)
-            operations[i] = op_conv
-
-    return operations
+            ops_compatible.extend(op_conv)
+        else:
+            ops_compatible.append(op)
+    return ops_compatible
 
 
 def factorized_gate_list_to_listOps(
@@ -144,7 +145,6 @@ def factorized_gate_list_to_listOps(
     :param device:
     :return:
     """
-
     # Create a circuit on the device
     circuit = cirq.Circuit(device=device)
 
@@ -155,19 +155,19 @@ def factorized_gate_list_to_listOps(
     ops_comp = convert_to_compatible_gates(ops, device)
 
     # When we append operations now, they are put into different moments.
-    circuit.append(ops)
+    circuit.append(ops_comp)
 
     # Optimise circuit for Sycamore
     circuit = cirq.google.optimized_for_sycamore(circuit)
 
     print(circuit)
-    return ops
+    return ops_comp
+
 
 
 factorized_gate_list = [[cirq.CZ,[0,1]], [cirq.CZ, [2,0]],
                         [cirq.CZ, [3,1]], [cirq.CZ, [2,3]], [cirq.H, [3]]]
-
 target_qubits = [cirq.GridQubit(4,i) for i in range(1,9)]
 ops = factorized_gate_list_to_listOps(factorized_gate_list, target_qubits)
 print(ops)
-len(ops)
+print(len(ops))
